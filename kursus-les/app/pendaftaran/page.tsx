@@ -1,49 +1,155 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+
+type Pendaftaran = {
+  nama: string;
+  email: string;
+  kursus: string;
+};
 
 export default function PendaftaranPage() {
-  const kursusTersedia = ["Web", "Mobile", "UI/UX"];
+  const [mounted, setMounted] = useState(false);
+  const [data, setData] = useState<Pendaftaran[]>([]);
+  const [kursusList, setKursusList] = useState<string[]>([]);
+
   const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
   const [kursus, setKursus] = useState("");
-  const [data, setData] = useState<any[]>([]);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
 
-  const daftar = () => {
-    if (!nama || !kursus) return;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    if (data.some(d => d.nama === nama && d.kursus === kursus)) {
-      alert("Sudah terdaftar");
+  useEffect(() => {
+    if (!mounted) return;
+
+    const saved = localStorage.getItem("pendaftaran");
+    if (saved) setData(JSON.parse(saved));
+
+    const kursusSaved = localStorage.getItem("kursus");
+    if (kursusSaved) {
+      const parsed = JSON.parse(kursusSaved);
+      setKursusList(parsed.map((k: any) => k.nama));
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem("pendaftaran", JSON.stringify(data));
+    }
+  }, [data, mounted]);
+
+  if (!mounted) return null;
+
+  // ➕ tambah / update
+  const submit = () => {
+    if (!nama || !email || !kursus) return;
+
+    const duplikat = data.some(
+      (d, i) =>
+        d.nama.toLowerCase() === nama.toLowerCase() &&
+        d.email.toLowerCase() === email.toLowerCase() &&
+        d.kursus === kursus &&
+        i !== editIndex
+    );
+
+    if (duplikat) {
+      alert("Siswa sudah terdaftar di kursus ini");
       return;
     }
 
-    setData([...data, { nama, kursus }]);
+    if (editIndex !== null) {
+      const copy = [...data];
+      copy[editIndex] = { nama, email, kursus };
+      setData(copy);
+      setEditIndex(null);
+    } else {
+      setData([...data, { nama, email, kursus }]);
+    }
+
     setNama("");
+    setEmail("");
     setKursus("");
+  };
+
+  // ✏️ edit
+  const edit = (i: number) => {
+    setNama(data[i].nama);
+    setEmail(data[i].email);
+    setKursus(data[i].kursus);
+    setEditIndex(i);
+  };
+
+  // 🗑️ hapus
+  const hapus = (i: number) => {
+    if (!confirm("Hapus data pendaftaran?")) return;
+
+    const copy = [...data];
+    copy.splice(i, 1);
+    setData(copy);
   };
 
   return (
     <div>
-      <h1>📝 Pendaftaran</h1>
+      <h1>Pendaftaran Siswa</h1>
 
+      {/* FORM */}
       <input
-        placeholder="Nama siswa"
+        placeholder="Nama Siswa"
         value={nama}
-        onChange={e => setNama(e.target.value)}
+        onChange={(e) => setNama(e.target.value)}
       />
 
-      <select value={kursus} onChange={e => setKursus(e.target.value)}>
-        <option value="">Pilih Kursus</option>
-        {kursusTersedia.map((k, i) => (
-          <option key={i} value={k}>{k}</option>
+      <input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <select value={kursus} onChange={(e) => setKursus(e.target.value)}>
+        <option value="">-- Pilih Kursus --</option>
+        {kursusList.map((k, i) => (
+          <option key={i} value={k}>
+            {k}
+          </option>
         ))}
       </select>
 
-      <button onClick={daftar}>Daftar</button>
+      <button onClick={submit}>
+        {editIndex !== null ? "Update" : "Daftar"}
+      </button>
 
-      <ul>
-        {data.map((d, i) => (
-          <li key={i}>{d.nama} - {d.kursus}</li>
-        ))}
-      </ul>
+      {/* TABLE */}
+      <table border={1} style={{ marginTop: 20, width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Kursus</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {data.map((d, i) => (
+            <tr key={i}>
+              <td>{d.nama}</td>
+              <td>{d.email}</td>
+              <td>{d.kursus}</td>
+
+              {/* 🔥 tombol sejajar */}
+              <td>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button onClick={() => edit(i)}>Edit</button>
+                  <button onClick={() => hapus(i)}>Hapus</button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
