@@ -100,7 +100,6 @@ export default function PengajarPage() {
     <div className="container">
       <h1>👨‍🏫 Data Pengajar</h1>
 
-      {/* FORM */}
       <input
         placeholder="Nama Pengajar"
         value={nama}
@@ -121,7 +120,6 @@ export default function PengajarPage() {
         {editIndex !== null ? "Update" : "Tambah"}
       </button>
 
-      {/* TABLE */}
       <table border={1}>
         <thead>
           <tr>
@@ -137,7 +135,6 @@ export default function PengajarPage() {
               <td>{p.nama}</td>
               <td>{p.kursus}</td>
 
-              {/* 🔥 BUTTON RAPI + SOLID */}
               <td>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button

@@ -43,7 +43,6 @@ export default function PendaftaranPage() {
 
   if (!mounted) return null;
 
-  // ➕ tambah / update
   const submit = () => {
     if (!nama || !email || !kursus) return;
 
@@ -74,7 +73,7 @@ export default function PendaftaranPage() {
     setKursus("");
   };
 
-  // ✏️ edit
+  // edit
   const edit = (i: number) => {
     setNama(data[i].nama);
     setEmail(data[i].email);
@@ -82,7 +81,7 @@ export default function PendaftaranPage() {
     setEditIndex(i);
   };
 
-  // 🗑️ hapus
+  // hapus
   const hapus = (i: number) => {
     if (!confirm("Hapus data pendaftaran?")) return;
 
@@ -95,7 +94,6 @@ export default function PendaftaranPage() {
     <div>
       <h1>Pendaftaran Siswa</h1>
 
-      {/* FORM */}
       <input
         placeholder="Nama Siswa"
         value={nama}
@@ -121,7 +119,6 @@ export default function PendaftaranPage() {
         {editIndex !== null ? "Update" : "Daftar"}
       </button>
 
-      {/* TABLE */}
       <table border={1} style={{ marginTop: 20, width: "100%" }}>
         <thead>
           <tr>
@@ -139,7 +136,6 @@ export default function PendaftaranPage() {
               <td>{d.email}</td>
               <td>{d.kursus}</td>
 
-              {/* 🔥 tombol sejajar */}
               <td>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button onClick={() => edit(i)}>Edit</button>

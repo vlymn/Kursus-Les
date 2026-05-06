@@ -34,8 +34,7 @@ export default function KursusPage() {
   }, [data, mounted]);
 
   if (!mounted) return null;
-
-  // ➕ TAMBAH / ✏️ UPDATE + SYNC PENGAJAR
+  
   const submit = () => {
     if (!nama || !kategori) return;
 
@@ -51,12 +50,10 @@ export default function KursusPage() {
     if (editIndex !== null) {
       const namaLama = data[editIndex].nama;
 
-      // update kursus
       const copy = [...data];
       copy[editIndex] = { nama, kategori };
       setData(copy);
 
-      // 🔄 SYNC KE PENGAJAR
       const savedPengajar = localStorage.getItem("pengajar");
       if (savedPengajar) {
         const pengajar = JSON.parse(savedPengajar);
@@ -77,14 +74,12 @@ export default function KursusPage() {
     setKategori("");
   };
 
-  // ✏️ EDIT
   const edit = (i: number) => {
     setNama(data[i].nama);
     setKategori(data[i].kategori);
     setEditIndex(i);
   };
 
-  // 🗑️ HAPUS + SYNC PENGAJAR
   const hapus = (i: number) => {
     if (!confirm("Hapus kursus ini?")) return;
 

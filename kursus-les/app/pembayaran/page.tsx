@@ -60,7 +60,6 @@ export default function PembayaranPage() {
     const sisa = pendaftaran.filter((_, i) => i !== selectedIndex);
     setPendaftaran(sisa);
 
-    // reset form
     setSelectedIndex(null);
     setHarga("");
   };
@@ -69,7 +68,6 @@ export default function PembayaranPage() {
     <div className="card">
       <h1>Pembayaran</h1>
 
-      {/* PILIH SISWA */}
       <select
         value={selectedIndex ?? ""}
         onChange={(e) => setSelectedIndex(Number(e.target.value))}
@@ -82,7 +80,6 @@ export default function PembayaranPage() {
         ))}
       </select>
 
-      {/* INPUT HARGA */}
       <input
         type="text"
         placeholder="Masukkan Harga"

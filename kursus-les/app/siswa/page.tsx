@@ -90,7 +90,6 @@ export default function SiswaPage() {
     <div style={{ padding: "20px" }}>
       <h1>Data Siswa</h1>
 
-      {/* FORM EDIT */}
       {editIndex !== null && (
         <div style={{ marginBottom: "20px", maxWidth: "300px" }}>
           <h3>Edit Siswa</h3>
@@ -126,7 +125,6 @@ export default function SiswaPage() {
         </div>
       )}
 
-      {/* TABLE */}
       <table
         border={1}
         style={{
@@ -152,7 +150,6 @@ export default function SiswaPage() {
               <td>{d.email}</td>
               <td>{d.kursus}</td>
 
-              {/* 🔥 BUTTON SOLID + SEJAJAR */}
               <td>
                 <div
                   style={{
@@ -199,7 +196,7 @@ export default function SiswaPage() {
   );
 }
 
-/* 🔐 GENERATE KODE */
+/* GENERATE KODE */
 function generateKode(nama: string, email: string) {
   const base = nama.toLowerCase() + email.toLowerCase();
   let hash = 0;
