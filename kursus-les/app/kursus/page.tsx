@@ -35,14 +35,12 @@ export default function KursusPage() {
 
   if (!mounted) return null;
 
-  // ➕ TAMBAH / UPDATE
+  // ➕ TAMBAH / ✏️ UPDATE + SYNC PENGAJAR
   const submit = () => {
     if (!nama || !kategori) return;
 
     const duplikat = data.some(
-      (d, i) =>
-        d.nama.toLowerCase() === nama.toLowerCase() &&
-        i !== editIndex
+      (d, i) => d.nama.toLowerCase() === nama.toLowerCase() && i !== editIndex
     );
 
     if (duplikat) {
@@ -51,9 +49,25 @@ export default function KursusPage() {
     }
 
     if (editIndex !== null) {
+      const namaLama = data[editIndex].nama;
+
+      // update kursus
       const copy = [...data];
       copy[editIndex] = { nama, kategori };
       setData(copy);
+
+      // 🔄 SYNC KE PENGAJAR
+      const savedPengajar = localStorage.getItem("pengajar");
+      if (savedPengajar) {
+        const pengajar = JSON.parse(savedPengajar);
+
+        const updatedPengajar = pengajar.map((p: any) =>
+          p.kursus === namaLama ? { ...p, kursus: nama } : p
+        );
+
+        localStorage.setItem("pengajar", JSON.stringify(updatedPengajar));
+      }
+
       setEditIndex(null);
     } else {
       setData([...data, { nama, kategori }]);
@@ -97,7 +111,6 @@ export default function KursusPage() {
     <div>
       <h1>Data Kursus</h1>
 
-      {/* FORM (TIDAK DIUBAH) */}
       <input
         placeholder="Nama Kursus"
         value={nama}
@@ -114,7 +127,6 @@ export default function KursusPage() {
         {editIndex !== null ? "Update" : "Tambah"}
       </button>
 
-      {/* TABLE (TIDAK DIUBAH) */}
       <table border={1}>
         <thead>
           <tr>
@@ -129,8 +141,6 @@ export default function KursusPage() {
             <tr key={i}>
               <td>{d.nama}</td>
               <td>{d.kategori}</td>
-
-              {/* 🔥 HANYA TOMBOL DIUBAH */}
               <td>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button
@@ -140,7 +150,6 @@ export default function KursusPage() {
                       backgroundColor: "#3b82f6",
                       color: "white",
                       border: "none",
-                      cursor: "pointer",
                     }}
                   >
                     Edit
@@ -153,7 +162,6 @@ export default function KursusPage() {
                       backgroundColor: "#ef4444",
                       color: "white",
                       border: "none",
-                      cursor: "pointer",
                     }}
                   >
                     Hapus

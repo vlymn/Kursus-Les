@@ -1,3 +1,4 @@
+/* ================= CSS KAMU (ASLI) ================= */
 /* RESET DASAR */
 * {
   box-sizing: border-box;
@@ -61,11 +62,6 @@ button:hover {
   background: #1e40af;
 }
 
-/* BUTTON KHUSUS */
-button + button {
-  margin-left: 8px;
-}
-
 button:last-child {
   background: #ef4444;
 }
@@ -93,32 +89,28 @@ table th {
   color: #ffffff;
 }
 
-table tr:nth-child(even) {
-  background: #f9fafb;
+/* ================= TAMBAHAN AMAN ================= */
+
+/* PRELOADER */
+.loader {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-/* HILANGKAN PANAH INPUT NUMBER */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 5px solid #e5e7eb;
+  border-top: 5px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-input[type=number] {
-  -moz-appearance: textfield;
-  appearance: textfield; /* ✅ tambahan standar */
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-  main,
-  div {
-    margin: 10px;
-    padding: 16px;
-  }
-
-  table th,
-  table td {
-    font-size: 12px;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

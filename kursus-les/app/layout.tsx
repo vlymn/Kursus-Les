@@ -1,8 +1,9 @@
+import type { Metadata } from "next";
 import "./globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Kursus Les",
-  description: "Website Kursus Les Sederhana",
+  description: "Sistem Informasi Kursus Les",
 };
 
 export default function RootLayout({
@@ -12,9 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
