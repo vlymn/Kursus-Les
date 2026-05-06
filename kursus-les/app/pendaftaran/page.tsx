@@ -8,10 +8,18 @@ type Pendaftaran = {
   kursus: string;
 };
 
+type Siswa = {
+  nama: string;
+  email: string;
+  kursus: string;
+  harga: string;
+};
+
 export default function PendaftaranPage() {
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState<Pendaftaran[]>([]);
   const [kursusList, setKursusList] = useState<string[]>([]);
+  const [siswaList, setSiswaList] = useState<Siswa[]>([]);
 
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +41,9 @@ export default function PendaftaranPage() {
       const parsed = JSON.parse(kursusSaved);
       setKursusList(parsed.map((k: any) => k.nama));
     }
+
+    const siswaSaved = localStorage.getItem("siswa");
+    if (siswaSaved) setSiswaList(JSON.parse(siswaSaved));
   }, [mounted]);
 
   useEffect(() => {
@@ -46,6 +57,22 @@ export default function PendaftaranPage() {
   const submit = () => {
     if (!nama || !email || !kursus) return;
 
+    const siswaAda = siswaList.find(
+      (s) => s.email.toLowerCase() === email.toLowerCase()
+    );
+
+    if (siswaAda) {
+      if (siswaAda.kursus === kursus) {
+        alert("❌ Siswa sudah terdaftar di kursus ini");
+        return;
+      }
+
+      if (siswaAda.nama.toLowerCase() !== nama.toLowerCase()) {
+        alert("⚠️ Nama tidak sesuai dengan data siswa");
+        return;
+      }
+    }
+
     const duplikat = data.some(
       (d, i) =>
         d.nama.toLowerCase() === nama.toLowerCase() &&
@@ -55,7 +82,7 @@ export default function PendaftaranPage() {
     );
 
     if (duplikat) {
-      alert("Siswa sudah terdaftar di kursus ini");
+      alert("⚠️ Data pendaftaran sudah ada");
       return;
     }
 
@@ -73,7 +100,6 @@ export default function PendaftaranPage() {
     setKursus("");
   };
 
-  // edit
   const edit = (i: number) => {
     setNama(data[i].nama);
     setEmail(data[i].email);
@@ -81,7 +107,6 @@ export default function PendaftaranPage() {
     setEditIndex(i);
   };
 
-  // hapus
   const hapus = (i: number) => {
     if (!confirm("Hapus data pendaftaran?")) return;
 
@@ -135,7 +160,6 @@ export default function PendaftaranPage() {
               <td>{d.nama}</td>
               <td>{d.email}</td>
               <td>{d.kursus}</td>
-
               <td>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button onClick={() => edit(i)}>Edit</button>
