@@ -87,22 +87,34 @@ table th {
   color: #ffffff;
 }
 
-/* PRELOADER */
-.loader {
-  height: 100vh;
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f4f6f8;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 16px;
+  z-index: 9999;
 }
 
 .spinner {
-  width: 42px;
-  height: 42px;
-  border: 5px solid #e5e7eb;
-  border-top: 5px solid #2563eb;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #4c1d95;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.preloader p {
+  color: #4c1d95;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 @keyframes spin {
